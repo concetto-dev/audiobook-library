@@ -1,13 +1,14 @@
 // Service worker for the audiobook library (GitHub Pages project subpath).
-// Two jobs:
-//   1. Precache the app shell so the UI loads with no network.
-//   2. Serve any asset already in a cache — including per-book audio that the
-//      "Download for offline" flow stored in a book-<id> cache.
-// Audio <audio> elements issue Range requests when seeking; a plain cached
-// 200 breaks scrubbing in Safari/iOS, so we synthesize a 206 from the cached
-// full body when a Range header is present.
+// Strategy split:
+//   * App shell (HTML/CSS/JS/JSON/TXT): network-first. Online listeners always
+//     get the freshly deployed code; the cache is only a fallback when offline.
+//     (A cache-first shell silently pinned stale builds — hence this split.)
+//   * Audio (.mp3): cache-first. Files are large and immutable per book, so we
+//     never re-fetch what the "Download for offline" flow already stored, and
+//     we synthesize 206 responses so seeking works from cache.
+// Bump VERSION on any shell-strategy change so old caches are evicted.
 
-const VERSION = "v1";
+const VERSION = "v2";
 const SHELL = "shell-" + VERSION;
 
 const SHELL_ASSETS = [
@@ -63,27 +64,44 @@ async function rangeResponse(request, cached) {
   });
 }
 
+async function cacheFirstAudio(req) {
+  const cached = await caches.match(req, { ignoreVary: true, ignoreSearch: true });
+  if (cached) {
+    try { return await rangeResponse(req, cached.clone()); }
+    catch (_) { return cached; }
+  }
+  return fetch(req);
+}
+
+async function networkFirstShell(req) {
+  try {
+    const fresh = await fetch(req);
+    // Keep the offline copy current for genuine shell assets.
+    if (fresh && fresh.ok && fresh.type === "basic") {
+      const copy = fresh.clone();
+      caches.open(SHELL).then((c) => c.put(req, copy)).catch(() => {});
+    }
+    return fresh;
+  } catch (err) {
+    const cached = await caches.match(req, { ignoreVary: true });
+    if (cached) return cached;
+    if (req.mode === "navigate") {
+      const shell = await caches.match("./index.html");
+      if (shell) return shell;
+    }
+    throw err;
+  }
+}
+
 self.addEventListener("fetch", (e) => {
   const req = e.request;
   if (req.method !== "GET") return;
   const url = new URL(req.url);
   if (url.origin !== self.location.origin) return;
 
-  e.respondWith((async () => {
-    const cached = await caches.match(req, { ignoreVary: true, ignoreSearch: false });
-    if (cached) {
-      try { return await rangeResponse(req, cached.clone()); }
-      catch (_) { return cached; }
-    }
-    try {
-      return await fetch(req);
-    } catch (err) {
-      // Offline and uncached. For navigations, fall back to the app shell.
-      if (req.mode === "navigate") {
-        const shell = await caches.match("./index.html");
-        if (shell) return shell;
-      }
-      throw err;
-    }
-  })());
+  if (url.pathname.endsWith(".mp3")) {
+    e.respondWith(cacheFirstAudio(req));
+  } else {
+    e.respondWith(networkFirstShell(req));
+  }
 });

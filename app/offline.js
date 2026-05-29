@@ -12,7 +12,19 @@ export function bookCacheName(bookId) {
 export async function registerSW() {
   if (!("serviceWorker" in navigator)) return null;
   try {
+    // If a worker is already in control, a later takeover means a new build
+    // activated — reload once so the page runs the fresh code. Skipped on the
+    // very first install (no prior controller), where the page is already current.
+    const hadController = !!navigator.serviceWorker.controller;
+    let reloaded = false;
+    navigator.serviceWorker.addEventListener("controllerchange", () => {
+      if (!hadController || reloaded) return;
+      reloaded = true;
+      location.reload();
+    });
+
     const reg = await navigator.serviceWorker.register("sw.js");
+    reg.update().catch(() => {});
     if (navigator.storage?.persist) {
       try { await navigator.storage.persist(); } catch (_) {}
     }
