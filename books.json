@@ -1,0 +1,16 @@
+{
+  "title": "Audiobook Library",
+  "books": [
+    {
+      "id": "magnifica-humanitas",
+      "slug": "magnifica-humanitas",
+      "title": "Magnifica Humanitas",
+      "subtitle": "On Safeguarding the Human Person in the Time of Artificial Intelligence",
+      "author": "Pope Leo XIV",
+      "date": "2026-05-15",
+      "kind": "Encyclical Letter",
+      "chapterCount": 7,
+      "totalDurationSec": 17880
+    }
+  ]
+}

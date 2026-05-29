@@ -1,0 +1,19 @@
+{
+  "id": "magnifica-humanitas",
+  "title": "Magnifica Humanitas",
+  "subtitle": "On Safeguarding the Human Person in the Time of Artificial Intelligence",
+  "author": "Pope Leo XIV",
+  "date": "2026-05-15",
+  "kind": "Encyclical Letter",
+  "voice": "Microsoft Zira (SAPI)",
+  "sourceUrl": "https://www.vatican.va/content/leo-xiv/en/encyclicals/documents/20260515-magnifica-humanitas.html",
+  "chapters": [
+    { "id": "01-introduction",  "label": "Introduction",  "file": "audio/part01_introduction.mp3",  "durationSec": 1348, "transcript": "transcripts/part01_introduction.txt" },
+    { "id": "02-chapter-one",   "label": "Chapter One",   "file": "audio/part02_chapter_one.mp3",   "durationSec": 2708, "transcript": "transcripts/part02_chapter_one.txt" },
+    { "id": "03-chapter-two",   "label": "Chapter Two",   "file": "audio/part03_chapter_two.mp3",   "durationSec": 2948, "transcript": "transcripts/part03_chapter_two.txt" },
+    { "id": "04-chapter-three", "label": "Chapter Three", "file": "audio/part04_chapter_three.mp3", "durationSec": 2877, "transcript": "transcripts/part04_chapter_three.txt" },
+    { "id": "05-chapter-four",  "label": "Chapter Four",  "file": "audio/part05_chapter_four.mp3",  "durationSec": 3651, "transcript": "transcripts/part05_chapter_four.txt" },
+    { "id": "06-chapter-five",  "label": "Chapter Five",  "file": "audio/part06_chapter_five.mp3",  "durationSec": 3002, "transcript": "transcripts/part06_chapter_five.txt" },
+    { "id": "07-conclusion",    "label": "Conclusion",    "file": "audio/part07_conclusion.mp3",    "durationSec": 1346, "transcript": "transcripts/part07_conclusion.txt" }
+  ]
+}
