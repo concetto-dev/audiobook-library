@@ -78,7 +78,11 @@ export async function renderBook(app, slug) {
     <div class="playerbar" id="bar">
       <div class="inner">
         <audio id="audio" controls preload="metadata"></audio>
-        <button class="commentbtn" id="commentBtn" title="Capture an interjection (pauses playback)">＋ Comment</button>
+        <div class="controls-row">
+          <button class="skipbtn" id="back10" title="Back 10 seconds">↺ 10s</button>
+          <button class="skipbtn" id="fwd10" title="Forward 10 seconds">10s ↻</button>
+          <button class="commentbtn" id="commentBtn" title="Capture an interjection (pauses playback)">＋ Comment</button>
+        </div>
       </div>
     </div>
 
@@ -209,6 +213,14 @@ export async function renderBook(app, slug) {
     await reloadNotes();
     closeCapture();
   }
+
+  app.querySelector("#back10").addEventListener("click", () => {
+    audio.currentTime = Math.max(0, (audio.currentTime || 0) - 10);
+  });
+  app.querySelector("#fwd10").addEventListener("click", () => {
+    const max = isFinite(audio.duration) ? audio.duration : Infinity;
+    audio.currentTime = Math.min(max, (audio.currentTime || 0) + 10);
+  });
 
   app.querySelector("#commentBtn").addEventListener("click", openCapture);
   app.querySelector("#modalCancel").addEventListener("click", closeCapture);
