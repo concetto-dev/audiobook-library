@@ -1,7 +1,10 @@
 import { renderLibrary } from "./library.js";
 import { renderBook } from "./book.js";
+import { registerSW } from "./offline.js";
 
 const app = document.getElementById("app");
+
+registerSW();
 
 async function route() {
   const h = location.hash.replace(/^#\/?/, "");

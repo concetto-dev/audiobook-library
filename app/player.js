@@ -28,6 +28,18 @@ export class Player {
 
   get chapter() { return this.book.chapters[this.index]; }
 
+  pause() { this.audio.pause(); }
+
+  position() {
+    return {
+      bookId: this.book.id,
+      chapterId: this.chapter.id,
+      chapterIndex: this.index,
+      positionSec: Math.floor(this.audio.currentTime || 0),
+      chapter: this.chapter,
+    };
+  }
+
   load(index, startAt = 0, autoplay = false) {
     this.index = Math.max(0, Math.min(index, this.book.chapters.length - 1));
     const ch = this.chapter;
@@ -50,6 +62,7 @@ export class Player {
 
   _onTime() {
     if (this.audio.seeking) return;
+    this.handlers.onTimeUpdate?.(this.index, this.audio.currentTime);
     const now = Date.now();
     if (now - this._lastSave > 4000) this._save();
   }

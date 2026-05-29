@@ -76,8 +76,71 @@ button.track.active { background: #2c2418; border-color: var(--gold); }
   background: rgba(20,17,14,.96); border-top: 1px solid var(--line);
   padding: 10px 16px calc(10px + env(safe-area-inset-bottom)); backdrop-filter: blur(8px);
 }
-.playerbar .inner { max-width: 680px; margin: 0 auto; }
-.playerbar audio { width: 100%; }
+.playerbar .inner { max-width: 680px; margin: 0 auto; display:flex; align-items:center; gap:10px; }
+.playerbar audio { flex: 1; min-width: 0; }
 .playerbar.hidden { display: none; }
+.commentbtn {
+  flex: 0 0 auto; background: var(--gold); color: #1a1206; border: none; border-radius: 8px;
+  padding: 10px 14px; font: inherit; font-weight: 600; cursor: pointer; white-space: nowrap;
+}
+.commentbtn:hover { filter: brightness(1.08); }
+.commentbtn:active { transform: translateY(1px); }
 
 footer { text-align: center; margin-top: 34px; font-size: 12px; color: #6b6457; }
+
+/* ---- interjections panel ---- */
+.notes { margin-top: 30px; border-top: 1px solid var(--line); padding-top: 22px; }
+.notes-head { display:flex; align-items:baseline; justify-content:space-between; gap:12px; flex-wrap:wrap; }
+.notes-head h2 { font-size: 18px; font-weight: 600; margin: 0; }
+.notes-head .count { color: var(--dim); font-weight: 400; font-size: 14px; }
+.notes-actions { display:flex; gap:14px; }
+.notes-empty { color: var(--dim); font-size: 14px; font-style: italic; }
+ol.notelist { list-style: none; padding: 0; margin: 14px 0 0; }
+.notelist li { display:flex; align-items:stretch; gap:8px; margin: 8px 0; }
+.note-jump {
+  flex: 1; text-align: left; background: var(--panel); color: var(--ink);
+  border: 1px solid var(--line); border-radius: 10px; padding: 12px 14px; font: inherit; cursor: pointer;
+}
+.note-jump:hover { background: var(--panel-2); border-color: var(--gold); }
+.note-where { display:block; color: var(--gold); font-size: 12px; letter-spacing:.04em; margin-bottom:4px; }
+.note-text { display:block; font-size: 15px; }
+.note-del {
+  flex: 0 0 auto; background: none; border: 1px solid var(--line); border-radius: 10px;
+  color: var(--dim); cursor: pointer; padding: 0 12px; font-size: 14px;
+}
+.note-del:hover { color: #d98a8a; border-color: #5a3a3a; }
+
+/* ---- capture modal ---- */
+.modal-back {
+  position: fixed; inset: 0; background: rgba(8,6,4,.66); backdrop-filter: blur(3px);
+  display:flex; align-items:center; justify-content:center; padding: 20px; z-index: 50;
+}
+.modal-back[hidden] { display: none; }
+.modal {
+  background: var(--panel); border: 1px solid var(--gold); border-radius: 14px;
+  padding: 22px; width: 100%; max-width: 440px;
+}
+.modal-where { color: var(--gold); font-size: 13px; margin: 0 0 4px; }
+.modal h3 { margin: 0 0 12px; font-size: 19px; font-weight: 600; }
+.modal textarea {
+  width: 100%; background: var(--bg); color: var(--ink); border: 1px solid var(--line);
+  border-radius: 10px; padding: 12px; font: inherit; font-size: 16px; resize: vertical;
+}
+.modal textarea:focus { outline: none; border-color: var(--gold); }
+.modal-actions { display:flex; justify-content:flex-end; gap:14px; align-items:center; margin-top: 14px; }
+.modal-actions .go { background: var(--gold); color:#1a1206; border:none; border-radius:8px; padding:10px 16px; font:inherit; font-weight:600; cursor:pointer; }
+.modal-hint { text-align:right; color: var(--dim); font-size: 12px; margin: 10px 0 0; }
+
+/* ---- commentary overlay (play-with-commentary mode) ---- */
+.commentary-overlay {
+  position: fixed; inset: 0; background: rgba(8,6,4,.72); backdrop-filter: blur(4px);
+  display:flex; align-items:center; justify-content:center; padding: 20px; z-index: 45;
+}
+.commentary-overlay[hidden] { display: none; }
+.commentary-card {
+  background: var(--panel); border: 1px solid var(--gold); border-radius: 14px;
+  padding: 26px; width: 100%; max-width: 460px; text-align: center;
+}
+.commentary-where { color: var(--gold); font-size: 13px; letter-spacing:.06em; margin: 0 0 12px; }
+.commentary-text { font-size: 19px; line-height: 1.5; margin: 0 0 22px; }
+.commentary-card .go { background: var(--gold); color:#1a1206; border:none; border-radius:8px; padding:11px 20px; font:inherit; font-weight:600; cursor:pointer; }
