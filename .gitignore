@@ -1,2 +1,8 @@
 node_modules/
 .DS_Store
+.vercel/
+
+# Private overlay — kept out of the public repo, served only from the
+# login-gated Vercel deploy (uploaded via .vercelignore, not git).
+books-private.json
+books/work-clean/
